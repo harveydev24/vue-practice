@@ -1,5 +1,8 @@
 <template>
   <div id="app">
+    <h1>Todo List</h1>
+    <h2>All Todos: {{ allTodosCount }}</h2>
+    <h2>Completed Todo: {{ completedTodosCount }}</h2>
     <todo-list></todo-list>
     <todo-form></todo-form>
   </div>
@@ -8,12 +11,16 @@
 <script>
 import TodoList from "./components/TodoList.vue";
 import TodoForm from "./components/TodoForm.vue";
+import { mapGetters } from "vuex";
 
 export default {
   name: "App",
   components: {
     TodoList,
     TodoForm,
+  },
+  computed: {
+    ...mapGetters(["completedTodosCount", "allTodosCount"]),
   },
 };
 </script>

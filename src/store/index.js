@@ -1,9 +1,11 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import createPersistedState from "vuex-persistedstate";
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
+  plugins: [createPersistedState()],
   state: {
     todos: [
       {
@@ -18,7 +20,16 @@ export default new Vuex.Store({
       },
     ],
   },
-  getters: {},
+  getters: {
+    completedTodosCount(state) {
+      return state.todos.filter((todo) => {
+        return todo.isCompleted;
+      }).length;
+    },
+    allTodosCount(state) {
+      return state.todos.length;
+    },
+  },
   mutations: {
     CREATE_TODO: function (state, todoItem) {
       state.todos.push(todoItem);
@@ -27,6 +38,18 @@ export default new Vuex.Store({
       const idx = state.todos.indexOf(todoItem);
       state.todos.splice(idx, 1);
     },
+    UPDATE_TODO: function (state, todoItem) {
+      state.todos = state.todos.map((todo) => {
+        if (todo === todoItem) {
+          return {
+            ...todo,
+            isCompleted: !todo.isCompleted,
+          };
+        } else {
+          return todo;
+        }
+      });
+    },
   },
   actions: {
     createTodo: function ({ commit }, todoItem) {
@@ -34,6 +57,9 @@ export default new Vuex.Store({
     },
     deleteTodo({ commit }, todoItem) {
       commit("DELETE_TODO", todoItem);
+    },
+    updateTodo({ commit }, todoItem) {
+      commit("UPDATE_TODO", todoItem);
     },
   },
   modules: {},

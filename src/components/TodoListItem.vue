@@ -1,13 +1,18 @@
 <template>
   <div>
-    <span>
+    <span
+      @click="updateTodo(todo)"
+      :class="{ 'is-completed': todo.isCompleted }"
+    >
       {{ todo.title }}
     </span>
-    <button @click="deleteTodo">Delete</button>
+    <button @click="deleteTodo(todo)">Delete</button>
   </div>
 </template>
 
 <script>
+import { mapActions } from "vuex";
+
 export default {
   name: "TodoListItem",
   props: {
@@ -17,12 +22,13 @@ export default {
   },
 
   methods: {
-    deleteTodo() {
-      this.$store.dispatch("deleteTodo", this.todo);
-      console.log(this);
-    },
+    ...mapActions(["deleteTodo", "updateTodo"]),
   },
 };
 </script>
 
-<style></style>
+<style>
+.is-completed {
+  text-decoration: line-through;
+}
+</style>

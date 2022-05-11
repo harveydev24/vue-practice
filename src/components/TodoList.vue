@@ -10,6 +10,7 @@
 
 <script>
 import TodoListItem from "./TodoListItem.vue";
+import { mapState } from "vuex";
 
 export default {
   name: "TodoList",
@@ -18,9 +19,7 @@ export default {
   },
 
   computed: {
-    todos: function () {
-      return this.$store.state.todos;
-    },
+    ...mapState(["todos"]),
   },
 };
 </script>
